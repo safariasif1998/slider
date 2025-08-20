@@ -280,3 +280,14 @@ body {
 /* .segunda {
     margin-left: 8px;
 } */
+.buy-container{
+    display: flex;
+    justify-content: space-around;
+}
+.buy{
+    background-color: red;
+    color: #fff;
+    border-radius: 3px;
+    padding: 4px 7px;
+    cursor: pointer;
+}
