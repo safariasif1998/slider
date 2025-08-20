@@ -1,54 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Arrow from "./Arrow";
+import CardItem from "./CardItem";
+import UnitStates from "./UnitStates";
+import Card from "./Card";
 
 export default function Slider() {
+  const [heroes, setHeroes] = useState([]);
+  const [courser, setCourser] = useState(0);
+  useEffect(() => {
+    fetch("http://localhost:3000/heroes")
+      .then((response) => response.json())
+      .then((heroes) => setHeroes(heroes));
+  }, []);
+
+  function handelPrevItem() {
+    const current = courser - 1 < 0 ? heroes.length - 1 : courser - 1;
+    setCourser(current);
+  }
+  function handelNextItem() {
+    const current = courser + 1 < heroes.length ? courser + 1 : 0;
+    setCourser(current);
+  }
   return (
     <div className="slide-container">
       <div className="wrapper">
-        <div className="arrow-wrapper">
-          <div className="round">
-            <div id="cta">
-              <span className={`arrow next`}></span>
+        {!heroes.length ? (
+          <div>Loading......</div>
+        ) : (
+          <>
+            <Arrow direction={"prev"} handelClick={handelPrevItem} />
+            <div className="clash-card barbarian">
+              <Card hero={heroes[courser]} />
             </div>
-          </div>
-        </div>
-        <div className="clash-card barbarian">
-          <div className={`clash-card__image clash-card__image--barbarian`}>
-            <img src="" alt="" />
-          </div>
-          <div className="clash-card__level clash-card__level--barbarian">
-            Level 4
-          </div>
-          <div className="clash-card__level clash-card__level--barbarian">
-            Level 4
-          </div>
-          <div className="clash-card__unit-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
-            nostrum.
-          </div>
-          <div
-            className={`clash-card__unit-stats clash-card__unit-stats--barbarian clearfix`}
-          >
-            <div className={"one-third"}>
-              <div className="stat">{20}</div>
-              <div className="stat-value">{"training"}</div>
-            </div>
-            <div className={"one-third"}>
-              <div className="stat">{16}</div>
-              <div className="stat-value">{"speed"}</div>
-            </div>
-            <div className={"one-third"}>
-              <div className="stat">{150}</div>
-              <div className="stat-value">{"cost"}</div>
-            </div>
-          </div>
-        </div>
-        <div className="arrow-wrapper">
-          <div className="round">
-            <div id="cta">
-              <span className={`arrow prev`}></span>
-            </div>
-          </div>
-        </div>
+            <Arrow direction={"next"} handelClick={handelNextItem} />
+          </>
+        )}
       </div>
       ;
     </div>
